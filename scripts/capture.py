@@ -2,18 +2,19 @@
 Capture labeled crops of the parts: this builds the dataset.
 
 How to use (one shape per run):
-  1. Run it, type which shape is on the mat and the session number.
-  2. Clear the mat and press Enter: it photographs the empty mat.
-  3. Put the 3 copies of that shape on the mat, spread out (not touching).
+  1. Run it, type which shape is on the mat and the session number or lighting description.
+  2. Clear the mat and press Enter: it photographs the empty mat (brightness and depth).
+  3. Put the 3 copies of that shape on the mat, spread out (not touching), but still within
+     yellow region. A pixel counts as a part if it is at least BRIGHT_DIFF brigher than the
+     empty reference mat.(Tried just depth at first but was too noisy at a distance)
   4. Press SPACE to save. Move and rotate the parts, press SPACE again. ~9 times.
   5. Press q to quit. Run again for the next shape.
 
-What it saves (inside learning_to_sort/data/):
-  crops/<shape>/...png        color crop of each part (what the later CNN and PCA will see)
-  crops/<shape>/..._mask.png  that part's black-and-white mask (for shape features)
-  crops/<shape>/..._depth.npy that part's depth crop, in mm
-  frames/...                  the full color + depth images, in case we need them later
-  labels.csv                  one row per crop: file, shape, session, box, area, depth
+Saves under data/:
+  frames/<id>_color.png, <id>_depth.npy               full frame
+  crops/<shape>/<id>_p<k>.png, _mask.png, _depth.npy  one set per part (PAD px border)
+  labels.csv                                          one row per part (appended, never overwritten)
+<id> = s<session>_<shape>_<HHMMSS run stamp>_<shot number>
 """
 import csv
 from pathlib import Path
